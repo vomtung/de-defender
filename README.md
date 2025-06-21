@@ -22,16 +22,16 @@ python manage.py runserver
 
 ```
 
-https://docs.djangoproject.com/en/5.2/intro/tutorial01/
-https://docs.djangoproject.com/en/5.2/intro/tutorial01/
-https://docs.djangoproject.com/en/5.2/intro/tutorial01/
-https://docs.djangoproject.com/en/5.2/intro/tutorial01/
+https://docs.djangoproject.com/en/5.2/intro/tutorial01/ </br>
+https://docs.djangoproject.com/en/5.2/intro/tutorial01/ </br>
+https://docs.djangoproject.com/en/5.2/intro/tutorial01/ </br>
+https://docs.djangoproject.com/en/5.2/intro/tutorial01/ </br>
 
 
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
+https://templatemo.com/tm-063-green-blog#google_vignette </br>
+https://templatemo.com/tm-063-green-blog#google_vignette </br>
+https://templatemo.com/tm-063-green-blog#google_vignette </br>
+https://templatemo.com/tm-063-green-blog#google_vignette </br>
 
 
 
