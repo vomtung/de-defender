@@ -27,14 +27,17 @@ https://docs.djangoproject.com/en/5.2/intro/tutorial01/
 https://docs.djangoproject.com/en/5.2/intro/tutorial01/
 https://docs.djangoproject.com/en/5.2/intro/tutorial01/
 
+
+https://templatemo.com/tm-063-green-blog#google_vignette
+https://templatemo.com/tm-063-green-blog#google_vignette
+https://templatemo.com/tm-063-green-blog#google_vignette
+https://templatemo.com/tm-063-green-blog#google_vignette
+
+
+
 ```bash
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
 ```
-
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
-https://templatemo.com/tm-063-green-blog#google_vignette
