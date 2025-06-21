@@ -41,3 +41,9 @@ python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
 ```
+
+# application url
+http://127.0.0.1:8000/ </br>
+http://127.0.0.1:8000/ </br>
+http://127.0.0.1:8000/ </br>
+http://127.0.0.1:8000/ </br>
