@@ -6,5 +6,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
     path('de-defender/', views.index, name='index'),
+    path('search/', views.search, name='search'),
 
 ]

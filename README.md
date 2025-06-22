@@ -35,11 +35,16 @@ https://templatemo.com/tm-063-green-blog#google_vignette </br>
 
 
 
-```bash
+```cmd
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
+
+python manage.py runserver
+python manage.py runserver
+python manage.py runserver
+python manage.py runserver
 ```
 
 # application url
