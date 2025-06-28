@@ -28,7 +28,7 @@ https://templatemo.com/tm-556-catalog-z
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-film mr-2"></i>
-                {{ app_title.config_value|default:"Django" }}
+                Django Defender
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -53,11 +53,12 @@ https://templatemo.com/tm-556-catalog-z
     </nav>
 
     <div class="tm-hero d-flex justify-content-center align-items-center" data-parallax="scroll" data-image-src="{% static 'img/hero.jpg' %}">
-        <form method="POST" action="{% url 'search' %}" class="d-flex tm-search-form">
+        <form method="POST" action="{% url 'save_website_html' %}" class="d-flex tm-search-form">
+            {# Make sure 'save_website_html' is a valid URL name in your urls.py #}
             {% csrf_token %}
-            <input name="keyword" class="form-control tm-search-input" type="search" placeholder="Search" aria-label="Search">
+            <input name="website_url" class="form-control tm-search-input" type="url" placeholder="Enter website URL" aria-label="Website URL" required>
             <button class="btn btn-outline-success tm-search-btn" type="submit">
-                <i class="fas fa-search"></i>
+            <i class="fas fa-search"></i>
             </button>
         </form>
 
