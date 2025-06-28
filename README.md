@@ -34,6 +34,14 @@ https://templatemo.com/tm-063-green-blog#google_vignette </br>
 https://templatemo.com/tm-063-green-blog#google_vignette </br>
 
 
+# intellij licences
+
+https://gitee.com/superbeyone/J2_B5_A5_C4/tree/master/licenses
+https://gitee.com/superbeyone/J2_B5_A5_C4/tree/master/licenses
+https://gitee.com/superbeyone/J2_B5_A5_C4/tree/master/licenses
+https://gitee.com/superbeyone/J2_B5_A5_C4/tree/master/licenses
+
+
 
 ```cmd
 python manage.py startapp home
