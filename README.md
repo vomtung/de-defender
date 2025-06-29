@@ -60,14 +60,12 @@ python manage.py makemigrations main
 Migrations for 'main':
   main\migrations\0001_initial.py
     + Create model WebsiteHTML
-```
+`
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
 
-
-```cmd
-python manage.py makemigrations
-python manage.py makemigrations
-python manage.py makemigrations
-python manage.py makemigrations
 python manage.py migrate
 python manage.py migrate
 python manage.py migrate
