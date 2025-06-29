@@ -58,7 +58,6 @@ p {
 .comment {
 	padding-left: 20px;
 	margin-left: 5px;
-	background: url(images/templatemo_comment_icon.gif) bottom left no-repeat;
 }
 /* ----- Form ----- */
 
@@ -113,7 +112,6 @@ form{
 	margin:0 auto;
 	padding: 0 0 0 30px;
 	color: #03a0a6;
-	background:  url(images/templatemo_menu_panel_bg.jpg) no-repeat;	
 }
 
 #templatemo_menu_section ul {
@@ -209,7 +207,7 @@ form{
 	padding-bottom: 10px;
 	margin-bottom: 30px;
 	border: 1px solid #191a0d;
-	background: #0b0c04  url(images/templatemo_post_bg.jpg) top right no-repeat;	
+	background: #0b0c04;	
 }
 
 * html #templatemo_content_left .templatemo_post {
@@ -257,7 +255,7 @@ form{
 	width: 600px;
 	padding: 15px 15px 10px 15px;
 	margin-bottom: 30px;
-	background: #0b0c04 url(images/templatemo_right_section_bg.jpg) top center no-repeat;	
+	background: #0b0c04;	
 	border: 1px solid #191a0d;	
 }
 
@@ -290,7 +288,7 @@ form{
 	min-height: 250px;
 	margin: 0 auto;
 	border-top: 1px solid #050702;
-	background: #050702 url(images/templatemo_content_bottom.jpg) center bottom no-repeat;	
+	background: #050702;	
 
 }
 
@@ -349,7 +347,7 @@ form{
 	width:100%;
 	height: 50px;
 	margin: 0 auto;
-	background: #040500 url(images/templatemo_footer_bg.jpg) center top no-repeat;
+	background: #040500 ;
 	border-top: 1px solid #141204;
 }
 
