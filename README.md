@@ -43,11 +43,30 @@ https://gitee.com/superbeyone/J2_B5_A5_C4/tree/master/licenses </br>
 
 
 
+
 ```cmd
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
 python manage.py startapp home
+
+```
+# mirage database
+
+```cmd
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py migrate
+python manage.py migrate
+python manage.py migrate
+python manage.py migrate
+```
+
+
+# start app
+```cmd
 
 python manage.py runserver
 python manage.py runserver
