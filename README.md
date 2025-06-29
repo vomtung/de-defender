@@ -33,6 +33,9 @@ https://templatemo.com/tm-063-green-blog#google_vignette </br>
 https://templatemo.com/tm-063-green-blog#google_vignette </br>
 https://templatemo.com/tm-063-green-blog#google_vignette </br>
 
+https://htmlcodex.com/bootstrap-5-admin-template/ </br>
+https://htmlcodex.com/bootstrap-5-admin-template/ </br>
+
 
 # intellij licences
 
@@ -60,14 +63,12 @@ python manage.py makemigrations main
 Migrations for 'main':
   main\migrations\0001_initial.py
     + Create model WebsiteHTML
-```
+`
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
+python manage.py makemigrations
 
-
-```cmd
-python manage.py makemigrations
-python manage.py makemigrations
-python manage.py makemigrations
-python manage.py makemigrations
 python manage.py migrate
 python manage.py migrate
 python manage.py migrate
