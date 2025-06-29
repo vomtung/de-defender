@@ -1,12 +1,12 @@
 {% load static %}
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>free blog template - green web blog</title>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="{% static 'templatemo_style.css' %}" rel="stylesheet" type="text/css" />
-<!--  Designed by w w w . t e m p l a t e m o . c o m  -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>free blog template - green web blog</title>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="{% static 'templatemo_style.css' %}" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
     
         <div id="templatemo_header_section">
             <div id="templatemo_title_section">
-            GREEN BLOG
+            DE Defender
             </div>
             <div id="templatemo_search_section">
                 <form method="POST" action="{% url 'save_website_html' %}">
@@ -45,21 +45,7 @@
             <div id="templatemo_content_left">
 				
                 <div class="templatemo_post">
-                    <div class="post_title">
-                    	Free Blog Template
-                    	  <div class="post_info">
-                    		Posted by <a href="#">TemplateMo.com</a>, December 7, 2024 at 2:13 am, in <a href="#">Web Template.</a>
-	                    </div>
-                    </div>
-                    
-                    <div class="post_body">
-                        <img src="{% static 'images/templatemo_image_01.jpg' %}" alt="Web Template" />
-                        <p>This is a free blog template provided by <a href="#">TemplateMo.com</a> website. You may download, modify and apply this CSS layout for your personal or business websites.</p>
-                        <p>Credit goes to <a rel="nofollow" href="http://www.photovaco.com" target="_blank">photovaco.com</a> for photos.</p>
-                      
-                    </div>
-                    <div class="post_comment">
-                    	<a href="#">12 comments</a></div>
+                    <canvas id="myChart" width="400" height="200"></canvas>
                 </div> <!-- end of post two -->
                 
                 <div class="templatemo_post">
@@ -93,7 +79,7 @@
                         <li><a href="#">Nunc blandit orci</a></li>
                     </ul>    
                 </div>
-                
+                <!--
                 <div class="templatemo_right_section">
                 	<h2>Archives</h2>
 					<ul>
@@ -124,7 +110,7 @@
                         <li>Vitae Neque on <a href="#">Nunc blandit orci sit amet</a></li>
                       <li>Donec Mollis on <a href="#">Maecenas adipiscing</a></li>
                   </ul>
-                </div>
+                </div>-->
                 
             </div> <!-- end of right content -->
 	    </div> <!-- end of content -->
@@ -183,5 +169,8 @@
 Green Blog Template 
 http://www.templatemo.com/preview/templatemo_063_green_blog 
 -->
+    <script id="chart-labels" type="application/json">{{ labels|safe }}</script>
+    <script id="chart-data" type="application/json">{{ data|safe }}</script>
+    <script src="{% static 'js/index.js' %}"></script>
 </body>
 </html>
