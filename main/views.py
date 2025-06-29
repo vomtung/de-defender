@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 import requests
+from django.http import JsonResponse
 from .models import WebsiteHTML
 
 
@@ -19,3 +20,11 @@ def save_website_html(url):
         return True
     except Exception:
         return False
+    
+def chart_data(request):
+    labels = ['January', 'February', 'March', 'April', 'May']
+    data = [100, 200, 150, 300, 250]
+    return JsonResponse({
+        'labels': labels,
+        'data': data
+    })
