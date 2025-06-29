@@ -17,9 +17,9 @@ def save_website_html(url):
         response.raise_for_status()
         html_content = response.text
         WebsiteHTML.objects.create(url=url, html=html_content)
-        return True
+        return redirect('de-defender')
     except Exception:
-        return False
+        return redirect('de-defender')
     
 def chart_data(request):
     labels = ['January', 'February', 'March', 'April', 'May']
