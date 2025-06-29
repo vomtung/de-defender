@@ -2,3 +2,4 @@ main/__pycache__/urls.cpython-313.pyc
 main/__pycache__/wsgi.cpython-313.pyc
 main/__pycache__/settings.cpython-313.pyc
 main/__pycache__/
+main/migrations/
