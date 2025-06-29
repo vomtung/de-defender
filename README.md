@@ -52,6 +52,16 @@ python manage.py startapp home
 
 ```
 # mirage database
+```cmd
+python manage.py makemigrations main
+python manage.py makemigrations main
+python manage.py makemigrations main
+python manage.py makemigrations main
+Migrations for 'main':
+  main\migrations\0001_initial.py
+    + Create model WebsiteHTML
+```
+
 
 ```cmd
 python manage.py makemigrations
@@ -62,6 +72,8 @@ python manage.py migrate
 python manage.py migrate
 python manage.py migrate
 python manage.py migrate
+
+
 
 python manage.py createsuperuser
 Username (leave blank to use 'tony'): root
@@ -90,3 +102,8 @@ http://127.0.0.1:8000/de-defender/ </br>
 http://127.0.0.1:8000/de-defender/ </br>
 http://127.0.0.1:8000/de-defender/ </br>
 http://127.0.0.1:8000/de-defender/ </br>
+
+http://127.0.0.1:8000/admin/ </br>
+http://127.0.0.1:8000/admin/ </br>
+http://127.0.0.1:8000/admin/ </br>
+http://127.0.0.1:8000/admin/ </br>
