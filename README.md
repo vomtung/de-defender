@@ -62,6 +62,12 @@ python manage.py migrate
 python manage.py migrate
 python manage.py migrate
 python manage.py migrate
+
+python manage.py createsuperuser
+Username (leave blank to use 'tony'): root
+Email address: root@gmail.com
+Password:123456
+Password(again):123456
 ```
 
 
