@@ -3,7 +3,7 @@ from .models import HistoryScan, WebsiteHTML
 
 @admin.register(WebsiteHTML)
 class WebsiteHTMLAdmin(admin.ModelAdmin):
-    list_display = ('app_name', 'app_url','app_created_date')
+    list_display = ('id','app_name', 'app_url','app_created_date')
     readonly_fields = ('app_created_date',) 
 
 @admin.register(HistoryScan)
