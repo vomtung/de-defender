@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class WebsiteHTML(models.Model):
+    id = models.AutoField(primary_key=True)  # Tự tăng ID
     app_name  = models.CharField(max_length=255)
     app_url = models.URLField(max_length=500)
     html_content = models.TextField()
