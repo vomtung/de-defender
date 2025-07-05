@@ -16,7 +16,8 @@ class HistoryScan(models.Model):
     app_id = models.IntegerField()
     app_name = models.CharField(max_length=255)
     app_url = models.URLField(max_length=500)
-    result = models.CharField(max_length=50)
+    status = models.CharField(max_length=50)
+    method = models.CharField(max_length=100)
     scan_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
