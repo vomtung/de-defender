@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 import requests
 from django.http import JsonResponse
-from .models import WebsiteHTML
+from .models import HistoryScan, WebsiteHTML
 import logging
 
 logger = logging.getLogger(__name__)
 
 def index(request):
-    return render(request, 'index.html')
+    history_list = HistoryScan.objects.order_by('-scan_time')[:10]  # Lấy 10 bản ghi mới nhất
+    return render(request, 'index.html', {'history_list': history_list})
     
 
 def search(request):
