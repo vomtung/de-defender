@@ -70,13 +70,20 @@
             <div id="templatemo_content_right">
             
             	<div class="templatemo_right_section">
-                	<h2>Categories</h2>
+                	<h2>History</h2>
 					<ul>
-                        <li><a href="#">Morbi nec magna pulvinar</a></li>
-                        <li><a href="#">Suspendisse rhoncus lectus</a></li>
-                        <li><a href="#">Pellentesque rutrum est</a></li>
-                        <li><a href="#">Nunc blandit orci</a></li>
-                    </ul>    
+                        {% for item in history_list %}
+                        <li>
+                            <a href="{{ item.app_url }}" target="_blank"
+                            style="color: {% if item.status == 'normal' %}green{% else %}red{% endif %};">
+                                {{ item.app_name }} - method: {{item.method}} - staus: {{item.status}} - {{ item.scan_time|date:"H:i:s d/m/Y" }}
+                            </a>
+                        </li>
+                        {% empty %}
+                            <li>No data.</li>
+                        {% endfor %}
+                    </ul>
+   
                 </div>
                 <!--
                 <div class="templatemo_right_section">
