@@ -14,6 +14,14 @@ logger = logging.getLogger(__name__)
 def scanWebsite():
     websites = WebsiteHTML.objects.all()
 
+    scan_html(websites)
+
+            
+
+            
+
+            
+def scan_html(websites):
     for site in websites:
 
         url = site.app_url
@@ -44,16 +52,9 @@ def scanWebsite():
                 status='attacked',
                 scan_time=timezone.now()
                 )
-
-            # Save scan result
-            
-
             logger.info(f"Scanned {url} - {status}")
         except Exception as e:
             logger.exception(f"Failed to scan {url}: {e}")
-
-            # Optional: Lưu scan lỗi
-            
 
 def start_scheduler():
     def job():

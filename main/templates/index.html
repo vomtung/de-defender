@@ -75,8 +75,8 @@
                         {% for item in history_list %}
                         <li>
                             <a href="{{ item.app_url }}" target="_blank"
-                            style="color: {% if item.result == 'normal' %}green{% else %}red{% endif %};">
-                                {{ item.app_name }} - {{item.result}} - {{ item.scan_time|date:"H:i d/m/Y" }}
+                            style="color: {% if item.status == 'normal' %}green{% else %}red{% endif %};">
+                                {{ item.app_name }} - method: {{item.method}} - staus: {{item.status}} - {{ item.scan_time|date:"H:i:s d/m/Y" }}
                             </a>
                         </li>
                         {% empty %}
