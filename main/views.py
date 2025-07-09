@@ -33,8 +33,8 @@ def save_website_html(request):
     return redirect('de-defender')
     
 def chart_data(request):
-    labels = ['January', 'February', 'March', 'April', 'May', 'June']
-    data = [100, 200, 150, 300, 250, 400]
+    labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July']
+    data = [100, 200, 150, 300, 250, 400, 350]
     return JsonResponse({
         'labels': labels,
         'data': data
