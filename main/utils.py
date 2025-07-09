@@ -26,7 +26,7 @@ def scan_html(websites):
 
         url = site.app_url
         old_html = site.html_content
-        print(f"== scanWebsite Scanning URL: {url}")
+        print(f"== scanWebsite Scanning HTML{url}")
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()

@@ -75,10 +75,10 @@ form{
 	color: #ffffff;
 	font-size: 13px;
 	font-variant: normal;
-	height: 15px;
+	height: 40px;
 	line-height: normal;
 	padding: 4px;
-	width: 230px;
+	width: 500px;
 }
 
 
@@ -171,8 +171,8 @@ form{
 
 #templatemo_header_section #templatemo_search_section{
 	float: right;
-	margin-right: 30px;
-	width: 500px;
+	margin-left: 30px;
+	width: 800px;
 	padding: 70px 0 15px 0;
 }
 
@@ -359,4 +359,12 @@ form{
 	text-align: center;
 
 }
+
+.input-large {
+    height: 40px;
+    font-size: 16px;
+    padding: 5px 10px;
+    box-sizing: border-box;
+}
+
 /* end of footer */
