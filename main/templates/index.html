@@ -70,13 +70,13 @@
             <div id="templatemo_content_right">
             
             	<div class="templatemo_right_section">
-                	<h2>History</h2>
+                	<h2>History Scan</h2>
 					<ul>
                         {% for item in history_list %}
                         <li>
                             <a href="{{ item.app_url }}" target="_blank"
                             style="color: {% if item.status == 'normal' %}green{% else %}red{% endif %};">
-                            [{{ item.scan_time|date:"H:i:s d/m/Y" }}] - {{ item.app_name }} - method: {{item.method}} - staus: {{item.status}} 
+                            [{{ item.scan_time|date:"H:i:s d/m/Y" }}] - {{ item.app_name }} - method: {{item.method}} - status: {{item.status}} 
                             </a>
                         </li>
                         {% empty %}

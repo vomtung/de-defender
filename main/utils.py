@@ -2,6 +2,7 @@
 import logging
 import threading
 import time
+import hashlib
 import requests
 from django.utils import timezone
 
@@ -15,6 +16,10 @@ def scanWebsite():
     websites = WebsiteHTML.objects.all()
 
     scan_html(websites)
+
+    checksum_comparison(websites)
+
+
 
             
 
@@ -55,6 +60,39 @@ def scan_html(websites):
             logger.info(f"Scanned {url} - {status}")
         except Exception as e:
             logger.exception(f"Failed to scan {url}: {e}")
+
+def checksum_comparison(websites):
+    for site in websites:
+        url = site.app_url
+        old_html = site.html_content.strip()
+
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            new_html = response.text.strip()
+
+            old_checksum = hashlib.md5(old_html.encode('utf-8')).hexdigest()
+            new_checksum = hashlib.md5(new_html.encode('utf-8')).hexdigest()
+
+            if old_checksum == new_checksum:
+                status = 'normal'
+            else:
+                status = 'attacked'
+
+            # Lưu kết quả vào HistoryScan
+            HistoryScan.objects.create(
+                app_id=site.id,
+                app_name=site.app_name,
+                app_url=site.app_url,
+                method='checksum-md5',
+                status=status,
+                scan_time=timezone.now()
+            )
+
+            print(f"[checksum] Scanned {url} - {status}")
+        except Exception as e:
+            print(f"[checksum] Failed to scan {url}: {e}")
+
 
 def start_scheduler():
     def job():
