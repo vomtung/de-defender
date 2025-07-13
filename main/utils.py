@@ -42,7 +42,7 @@ def compare_html(websites):
                 app_id=site.id,
                 app_name=site.app_name,
                 app_url=site.app_url,
-                method='compare-html',
+                method='COMPATRE-HTML',
                 status='normal',
                 scan_time=timezone.now()
             )
@@ -52,7 +52,7 @@ def compare_html(websites):
                 app_id=site.id,
                 app_name=site.app_name,
                 app_url=site.app_url,
-                method='compare-html',
+                method='COMPARE-HTML',
                 status='attacked',
                 scan_time=timezone.now()
                 )
@@ -83,7 +83,7 @@ def compare_checksum(websites):
                 app_id=site.id,
                 app_name=site.app_name,
                 app_url=site.app_url,
-                method='checksum-md5',
+                method='COMPARE-CHECKSUM',
                 status=status,
                 scan_time=timezone.now()
             )
@@ -124,7 +124,7 @@ def compare_dom_tree(websites):
                 app_id=site.id,
                 app_name=site.app_name,
                 app_url=site.app_url,
-                method='compare-dom-tree',
+                method='COMPARE-DOM',
                 status=status,
                 scan_time=timezone.now()
             )
