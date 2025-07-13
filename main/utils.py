@@ -15,18 +15,16 @@ logger = logging.getLogger(__name__)
 def scanWebsite():
     websites = WebsiteHTML.objects.all()
 
-    scan_html(websites)
+    compare_html(websites)
 
-    checksum_comparison(websites)
+    compare_checksum(websites)
 
 
-
-            
 
             
 
             
-def scan_html(websites):
+def compare_html(websites):
     for site in websites:
 
         url = site.app_url
@@ -61,7 +59,7 @@ def scan_html(websites):
         except Exception as e:
             logger.exception(f"Failed to scan {url}: {e}")
 
-def checksum_comparison(websites):
+def compare_checksum(websites):
     for site in websites:
         url = site.app_url
         old_html = site.html_content.strip()
