@@ -4,6 +4,7 @@ import threading
 import time
 import hashlib
 import requests
+from bs4 import BeautifulSoup
 from django.utils import timezone
 
 from django.conf import settings
@@ -15,18 +16,16 @@ logger = logging.getLogger(__name__)
 def scanWebsite():
     websites = WebsiteHTML.objects.all()
 
-    scan_html(websites)
+    compare_html(websites)
 
-    checksum_comparison(websites)
+    compare_checksum(websites)
 
-
-
-            
+    compare_dom_tree(websites)
 
             
 
             
-def scan_html(websites):
+def compare_html(websites):
     for site in websites:
 
         url = site.app_url
@@ -61,7 +60,7 @@ def scan_html(websites):
         except Exception as e:
             logger.exception(f"Failed to scan {url}: {e}")
 
-def checksum_comparison(websites):
+def compare_checksum(websites):
     for site in websites:
         url = site.app_url
         old_html = site.html_content.strip()
@@ -92,6 +91,47 @@ def checksum_comparison(websites):
             print(f"[checksum] Scanned {url} - {status}")
         except Exception as e:
             print(f"[checksum] Failed to scan {url}: {e}")
+
+def compare_dom_tree(websites):
+    for site in websites:
+        url = site.app_url
+        old_html = site.html_content
+        logger.info(f"== compare_dom_tree Scanning DOM for {url}")
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            new_html = response.text
+
+            # Parse DOM trees
+            old_soup = BeautifulSoup(old_html, 'html.parser')
+            new_soup = BeautifulSoup(new_html, 'html.parser')
+
+            # Serialize DOM structure (tag names only)
+            def serialize_dom(soup):
+                return [tag.name for tag in soup.find_all()]
+
+            old_dom = serialize_dom(old_soup)
+            new_dom = serialize_dom(new_soup)
+
+            # So sánh
+            if old_dom == new_dom:
+                status = 'normal'
+            else:
+                status = 'attacked'
+
+            # Lưu kết quả
+            HistoryScan.objects.create(
+                app_id=site.id,
+                app_name=site.app_name,
+                app_url=site.app_url,
+                method='compare-dom-tree',
+                status=status,
+                scan_time=timezone.now()
+            )
+            logger.info(f"DOM Tree scan {url} - {status}")
+
+        except Exception as e:
+            logger.exception(f"Error comparing DOM tree for {url}: {e}")
 
 
 def start_scheduler():
