@@ -15,10 +15,10 @@ django-admin --version
 django-admin startproject main .
 
 
-python manage.py runserver
-python manage.py runserver
-python manage.py runserver
-python manage.py runserver
+pip install beautifulsoup4
+pip install beautifulsoup4
+pip install beautifulsoup4
+pip install beautifulsoup4
 
 ```
 
