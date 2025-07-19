@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>free blog template - green web blog</title>
+    <title>Setting - DE Defender</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="{% static 'templatemo_style.css' %}" rel="stylesheet" type="text/css" />
@@ -14,8 +14,8 @@
 	<div id="templatemo_menu_panel">
     	<div id="templatemo_menu_section">
             <ul>
-                <li><a href="#" class="current">Home</a></li>
-                <li><a href="{% url 'setting' %}">Setting</a></li>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'setting' %}" class="current">Setting</a></li>
                 <li><a href="#">Videos</a></li>
                 <li><a href="#">Archives</a></li>  
                 <li><a href="#">Links</a></li> 
@@ -29,7 +29,7 @@
     
         <div id="templatemo_header_section">
             <div id="templatemo_title_section">
-            DE Defender
+            DE Defender - Settings
             </div>
             <div id="templatemo_search_section">
                 <form method="POST" action="{% url 'save_website_html' %}">
@@ -44,25 +44,18 @@
             <div id="templatemo_content_left">
 				
                 <div class="templatemo_post">
-                    <canvas id="myChart" width="800" height="400"></canvas>
-                </div> <!-- end of post two -->
-                
-                <div class="templatemo_post">
                     <div class="post_title">
-                    	Website defacement
+                    	Settings Dashboard
                     	  <div class="post_info">
-                    		Posted by <a href="#">en.wikipedia.org</a>, January 1, 2025 at 6:45 am, in <a href="#">Web Template.</a>
+                    		Configuration page for website security monitoring
 	                    </div>
                     </div>
                     
                     <div class="post_body">
-                        <img src="{% static 'images/templatemo_image_02.jpg' %}" alt="CSS Template" />
-                        <p>Website defacement is an attack on a website that changes the visual appearance of a website or a web page.</p>
-                        <p>These are typically the work of hackers, who break into a web server and replace the hosted website with malware or a website of their own.</p>
+                        <p>This page contains settings and configuration for website security monitoring and defacement detection.</p>
+                        <p>Here you can configure scan intervals, notification preferences, and other system settings.</p>
                     </div>
-                    <div class="post_comment">
-                    	<a href="#">No comment</a></div>
-                </div> <!-- end of post two -->
+                </div> <!-- end of post -->
 
                 
             </div> <!-- end of content left -->
@@ -70,53 +63,15 @@
             <div id="templatemo_content_right">
             
             	<div class="templatemo_right_section">
-                	<h2>History Scan</h2>
+                	<h2>System Configuration</h2>
 					<ul>
-                        {% for item in history_list %}
-                        <li>
-                            <a href="{{ item.app_url }}" target="_blank"
-                            style="color: {% if item.status == 'normal' %}green{% else %}red{% endif %};">
-                            [{{ item.scan_time|date:"H:i:s d/m/Y" }}] &lt;&lt;{{item.method}}&gt;&gt;- {{ item.app_name }} - status: {{item.status}} 
-                            </a>
-                        </li>
-                        {% empty %}
-                            <li>No data.</li>
-                        {% endfor %}
+                        <li>Auto scan: Disabled</li>
+                        <li>Scan interval: 1 hour</li>
+                        <li>Email notifications: Off</li>
+                        <li>Last updated: Never</li>
                     </ul>
    
                 </div>
-                <!--
-                <div class="templatemo_right_section">
-                	<h2>Archives</h2>
-					<ul>
-                        <li><a href="#">January 2024</a></li>
-                        <li><a href="#">December 2023</a></li>
-                        <li><a href="#">November 2023</a></li>
-                        <li><a href="#">October 2023</a></li>
-                        <li><a href="#">September 2023</a></li>
-                    </ul>  
-                </div>
-                
-                 <div class="templatemo_right_section">
-	                <h2>Popular Posts</h2>
-                	<ul class="popular_post">	
-                        <li><a href="#">Donec mollis aliquet</a><br />Author 1 - Oct 14, 2024 <span class="comment">12 replies</span></li>
-                        <li><a href="#">Aliquam tristique lacust</a><br />Author 2 - Oct 14, 2024 <span class="comment">8 replies</span></li>
-                        <li><a href="#">Suspendisse potent</a><br />Author 3 - Oct 14, 2024 <span class="comment">10 replies</span></li>
-                        <li><a href="#">Nullam vitae tellus</a><br />Author 4 - Oct 14, 2024 <span class="comment">30 replies</span></li>
-                    </ul>
-                </div>
-                
-                <div class="templatemo_right_section">
-	                <h2>Recent Comments</h2>
-                	<ul>	
-                        <li>Lorem Ipsum on <a href="#">Donec mollis aliquet</a></li>
-                        <li>Consectetuer on <a href="#">Suspendisse a nibh</a></li>
-                        <li>Sed on <a href="#">Pellentesque vitae magna</a></li>
-                        <li>Vitae Neque on <a href="#">Nunc blandit orci sit amet</a></li>
-                      <li>Donec Mollis on <a href="#">Maecenas adipiscing</a></li>
-                  </ul>
-                </div>-->
                 
             </div> <!-- end of right content -->
 	    </div> <!-- end of content -->
