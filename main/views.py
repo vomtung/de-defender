@@ -12,6 +12,9 @@ def index(request):
     HistoryScan.objects.exclude(id__in=latest_ids).delete()
 
     return render(request, 'index.html', {'history_list': history_list})
+
+def setting(request):
+    return render(request, 'setting.html')
     
 
 def search(request):
