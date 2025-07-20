@@ -379,3 +379,76 @@ form{
 }
 
 /* end of footer */
+
+/* Main Content Container */
+.setting_main_content_container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    min-height: 70vh;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+/* Setting Panel Styles */
+.setting_panel_left {
+    flex: 1;
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.setting_panel_right {
+    flex: 1;
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.setting_panel_left h2, .setting_panel_right h2 {
+    color: #ff9d11;
+    margin-bottom: 20px;
+}
+
+.setting_panel_left label, .setting_panel_right label {
+    color: #ffffff;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.setting_panel_left input, .setting_panel_right input {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.setting_panel_left button, .setting_panel_right button {
+    background-color: #ff9d11;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.setting_panel_left button:hover, .setting_panel_right button:hover {
+    background-color: #e88a00;
+}
+
+.setting_panel_left input[type="submit"], .setting_panel_right input[type="submit"] {
+    background-color: #ff9d11;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.setting_panel_left input[type="submit"]:hover, .setting_panel_right input[type="submit"]:hover {
+    background-color: #e88a00;
+}
