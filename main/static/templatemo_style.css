@@ -13,7 +13,7 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	color: #ffffff;
-	background: #ffffff;
+	background: #0b0c04;
 }
 
 a:link, a:visited { color: #ffc64a; text-decoration:none; } 
@@ -257,6 +257,17 @@ form{
 	margin-bottom: 30px;
 	background: #0b0c04;	
 	border: 1px solid #191a0d;	
+}
+
+.setting_panel{
+	clear: both;
+	display: block;
+	width: 80%;
+	margin: 20px auto;
+	padding: 20px;
+	background: #0b0c04;	
+	border: 2px solid #ddd;
+	border-radius: 8px;
 }
 
 #templatemo_content_right .templatemo_right_section .popular_post {
