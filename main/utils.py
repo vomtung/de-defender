@@ -143,4 +143,4 @@ def start_scheduler():
         t.start()
 
     print("== Scheduler started ==")
-    #job()
+    job()
