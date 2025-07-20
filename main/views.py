@@ -12,67 +12,45 @@ logger = logging.getLogger(__name__)
 
 def create_bigrams(text):
     """
-    Tạo bigrams từ HTML text và đếm tần suất xuất hiện
-    Returns: dictionary với bigram làm key và tần suất làm value
+    Create bigrams from HTML text and count their frequency
+    Returns: dictionary with bigram as key and frequency as value
     """
-    # Làm sạch HTML: loại bỏ tags và giữ lại nội dung text
+    # Clean HTML: remove tags and keep text content
     clean_text = re.sub(r'<[^>]+>', ' ', text)
     
-    # Chuyển về lowercase và loại bỏ ký tự đặc biệt
+    # Convert to lowercase and remove special characters
     clean_text = re.sub(r'[^\w\s]', ' ', clean_text.lower())
     
-    # Tách thành các từ
+    # Split into words
     words = clean_text.split()
     
-    # Tạo bigrams
+    # Create bigrams
     bigrams = []
     for i in range(len(words) - 1):
         bigram = f"{words[i]} {words[i+1]}"
         bigrams.append(bigram)
     
-    # Đếm tần suất xuất hiện
+    # Count frequency of occurrence
     bigram_counts = Counter(bigrams)
     
     return bigram_counts
 
 def save_bigrams_to_db(bigram_counts, label):
     """
-    Lưu bigrams và tần suất vào database dưới dạng JSON
+    Save bigrams and frequency to database as JSON - Create separate record for each row
     """
     try:
-        # Chuyển Counter thành dict thông thường
+        # Convert Counter to regular dictionary
         bigram_dict = dict(bigram_counts)
         
-        # Kiểm tra xem đã có record nào cho label này chưa
-        existing_record = BigramData.objects.filter(label=label).first()
+        # Create new record for each row
+        BigramData.objects.create(
+            bigram_json=bigram_dict,
+            label=label,
+            total_bigrams=len(bigram_dict)
+        )
         
-        if existing_record:
-            # Cập nhật JSON: merge với data cũ
-            old_bigrams = existing_record.bigram_json
-            
-            # Cộng tần suất cho các bigram đã tồn tại
-            for bigram, freq in bigram_dict.items():
-                if bigram in old_bigrams:
-                    old_bigrams[bigram] += freq
-                else:
-                    old_bigrams[bigram] = freq
-            
-            existing_record.bigram_json = old_bigrams
-            existing_record.total_bigrams = len(old_bigrams)
-            existing_record.save()
-            
-            print(f"Updated existing record with {len(bigram_dict)} new bigrams for label: {label}")
-            print(f"Total bigrams now: {existing_record.total_bigrams}")
-        else:
-            # Tạo record mới
-            BigramData.objects.create(
-                bigram_json=bigram_dict,
-                label=label,
-                total_bigrams=len(bigram_dict)
-            )
-            
-            print(f"Created new record with {len(bigram_dict)} bigrams for label: {label}")
-        
+        print(f"Created new record with {len(bigram_dict)} bigrams for label: {label}")
         return len(bigram_dict)
         
     except Exception as e:
@@ -80,7 +58,7 @@ def save_bigrams_to_db(bigram_counts, label):
         return 0
 
 def index(request):
-    history_list = HistoryScan.objects.order_by('-scan_time')[:10]  # Lấy 10 bản ghi mới nhất
+    history_list = HistoryScan.objects.order_by('-scan_time')[:10]  # Get 10 latest records
     latest_ids = HistoryScan.objects.order_by('-scan_time').values_list('id', flat=True)[:10]
     HistoryScan.objects.exclude(id__in=latest_ids).delete()
 
@@ -98,38 +76,51 @@ def upload_dataset(request):
                 print(f"== Upload Dataset: {dataset_file.name}")
                 print(f"== File size: {dataset_file.size} bytes")
                 
-                # Đọc nội dung file trực tiếp từ memory (không lưu file)
+                # DELETE ALL OLD DATA IN BigramData BEFORE IMPORT
+                old_count = BigramData.objects.count()
+                BigramData.objects.all().delete()
+                print(f"== Deleted {old_count} old BigramData records")
+                
+                # Read file content directly from memory (don't save file)
                 try:
                     if dataset_file.name.endswith('.csv'):
-                        # Đọc CSV từ memory
+                        # Read CSV from memory
                         file_content = dataset_file.read().decode('utf-8')
                         csv_reader = csv.DictReader(io.StringIO(file_content))
                         
                         print(f"== Column names: {csv_reader.fieldnames}")
                         
-                        print("== First 5 rows:")
+                        # Reset reader to read all data
+                        csv_reader = csv.DictReader(io.StringIO(file_content))
+                        
+                        total_rows = 0
+                        print("== Processing all rows:")
                         for i, row in enumerate(csv_reader):
-                            if i >= 5:  # Chỉ in 5 dòng đầu
-                                break
-                            print(f"Row {i + 1}:")
                             html_content = row.get('HTML', row.get('html', ''))
                             label_content = row.get('label', row.get('Label', ''))
-                            print(f"  HTML: {html_content[:100]}...")  # In 100 ký tự đầu
-                            print(f"  Label: {label_content}")
                             
-                            # Tạo bigrams từ HTML content
-                            bigram_counts = create_bigrams(html_content)
-                            print(f"  Total bigrams: {len(bigram_counts)}")
-                            print(f"  Top 5 bigrams:")
-                            for bigram, count in list(bigram_counts.most_common(5)):
-                                print(f"    '{bigram}': {count}")
+                            # Only process when label = 0
+                            if label_content == '0':
+                                # Create bigrams from HTML content
+                                bigram_counts = create_bigrams(html_content)
+                                
+                                # Save bigrams to database - CREATE 1 RECORD PER ROW
+                                save_bigrams_to_db(bigram_counts, label_content)
                             
-                            # Lưu bigrams vào database
-                            save_bigrams_to_db(bigram_counts, label_content)
-                            
-                            print("---")
+                            total_rows += 1
+                            if i < 5:  # Print details for first 5 rows
+                                print(f"Row {i + 1}:")
+                                print(f"  HTML: {html_content[:100]}...")
+                                print(f"  Label: {label_content}")
+                                print(f"  Total bigrams: {len(bigram_counts)}")
+                                print(f"  Top 5 bigrams:")
+                                for bigram, count in list(bigram_counts.most_common(5)):
+                                    print(f"    '{bigram}': {count}")
+                                print("---")
+                        
+                        print(f"== Processed {total_rows} rows total")
                     
-                    # Đọc file text/json từ memory
+                    # Read text/json file from memory
                     elif dataset_file.name.endswith(('.txt', '.json')):
                         content = dataset_file.read().decode('utf-8')
                         print(f"== File content (first 500 chars): {content[:500]}...")
