@@ -123,3 +123,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SCAN_INTERVAL_SECONDS = 5
+
+# Bigram Detection Settings (Kim et al. approach)
+BIGRAM_SIMILARITY_THRESHOLD = 0.7  # Cosine similarity threshold for defacement detection
+BIGRAM_TOP_FEATURES = 300          # Top 300 most frequent bigrams to use as features
