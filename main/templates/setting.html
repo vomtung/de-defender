@@ -24,21 +24,38 @@
 		</div>
     </div> <!-- end of menu -->
 
-
-    
+    <div class="setting_main_content_container">
         
-        <div id="upload_dataset_button" class="setting_panel">
-            <h2 style="color: #ff9d11; margin-bottom: 20px;">Upload BiGram Dataset</h2>
+        <!-- Left Panel - 50% width -->
+        <div id="upload_dataset_button" class="setting_panel_left">
+            <h2>Upload BiGram Dataset</h2>
             <form method="POST" action="{% url 'upload_bigram_dataset' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div style="margin-bottom: 15px;">
-                    <label for="dataset_file" style="color: #ffffff; display: block; margin-bottom: 5px;">Choose dataset file:</label>
-                    <input type="file" name="dataset_file" id="dataset_file" accept=".csv,.txt,.json" style="padding: 5px; margin-bottom: 10px;">
+                    <label for="dataset_file">Choose dataset file:</label>
+                    <input type="file" name="dataset_file" id="dataset_file" accept=".csv,.txt,.json">
                 </div>
-                <input type="submit" value="Upload BiGram Dataset" style="background-color: #ff9d11; color: #ffffff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                <input type="submit" value="Upload BiGram Dataset">
             </form>
         </div>
         
+        <!-- Right Panel - 50% width -->
+        <div id="detection_settings" class="setting_panel_right">
+            <h2>Detection Settings</h2>
+            <div>
+                <div style="margin-bottom: 15px;">
+                    <label>BiGram Similarity Threshold:</label>
+                    <input type="number" value="0.7" step="0.1" min="0" max="1" style="width: 100px;">
+                    <span style="color: #cccccc; font-size: 12px; margin-left: 10px;">Default: 0.7</span>
+                </div>
+                
+                <button style="margin-top: 10px;">
+                    Update Settings
+                </button>
+            </div>
+        </div>
+        
+    </div> <!-- end of setting main content container -->
 
 	<div id="templatemo_bottom_panel">
     	<div id="templatemo_bottom_section">
