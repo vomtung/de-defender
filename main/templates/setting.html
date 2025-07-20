@@ -27,9 +27,16 @@
 
     
         
-        <div class="setting_panel">
-            test
-            test
+        <div id="upload_dataset_button" class="setting_panel">
+            <h2 style="color: #ff9d11; margin-bottom: 20px;">Upload Dataset</h2>
+            <form method="POST" action="{% url 'upload_dataset' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div style="margin-bottom: 15px;">
+                    <label for="dataset_file" style="color: #ffffff; display: block; margin-bottom: 5px;">Choose dataset file:</label>
+                    <input type="file" name="dataset_file" id="dataset_file" accept=".csv,.txt,.json" style="padding: 5px; margin-bottom: 10px;">
+                </div>
+                <input type="submit" value="Upload Dataset" style="background-color: #ff9d11; color: #ffffff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            </form>
         </div>
         
 

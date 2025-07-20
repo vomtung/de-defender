@@ -15,6 +15,33 @@ def index(request):
 
 def setting(request):
     return render(request, 'setting.html')
+
+def upload_dataset(request):
+    if request.method == 'POST':
+        try:
+            dataset_file = request.FILES.get('dataset_file')
+            
+            if dataset_file:
+                print(f"== Upload Dataset: {dataset_file.name}")
+                print(f"== File size: {dataset_file.size} bytes")
+                
+                # Lưu file vào thư mục (có thể cần tạo thư mục trước)
+                import os
+                upload_dir = 'uploads/datasets'
+                os.makedirs(upload_dir, exist_ok=True)
+                
+                file_path = os.path.join(upload_dir, dataset_file.name)
+                with open(file_path, 'wb+') as destination:
+                    for chunk in dataset_file.chunks():
+                        destination.write(chunk)
+                
+                logger.info(f"Dataset uploaded successfully: {file_path}")
+                # Có thể lưu thông tin vào database nếu cần
+                
+        except Exception as e:
+            logger.exception(f"Error uploading dataset: {e}")
+    
+    return redirect('setting')
     
 
 def search(request):
