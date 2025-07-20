@@ -4,12 +4,15 @@ import threading
 import time
 import hashlib
 import requests
+import re
+import math
 from bs4 import BeautifulSoup
 from django.utils import timezone
+from collections import Counter
 
 from django.conf import settings
 
-from main.models import HistoryScan, WebsiteHTML
+from main.models import HistoryScan, WebsiteHTML, BigramData
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +24,9 @@ def scanWebsite():
     compare_checksum(websites)
 
     compare_dom_tree(websites)
+
+    compare_bigrams(websites)
+
 
             
 
@@ -133,6 +139,140 @@ def compare_dom_tree(websites):
         except Exception as e:
             logger.exception(f"Error comparing DOM tree for {url}: {e}")
 
+
+def create_bigrams(text):
+    """
+    Create bigrams from HTML text and count their frequency
+    Returns: Counter object with bigram frequencies
+    """
+    # Clean HTML: remove tags and keep text content
+    clean_text = re.sub(r'<[^>]+>', ' ', text)
+    
+    # Convert to lowercase and remove special characters
+    clean_text = re.sub(r'[^\w\s]', ' ', clean_text.lower())
+    
+    # Split into words
+    words = clean_text.split()
+    
+    # Create bigrams
+    bigrams = []
+    for i in range(len(words) - 1):
+        bigram = f"{words[i]} {words[i+1]}"
+        bigrams.append(bigram)
+    
+    # Count frequency of occurrence
+    bigram_counts = Counter(bigrams)
+    
+    return bigram_counts
+
+def cosine_similarity(vec1, vec2):
+    """
+    Calculate cosine similarity between two vectors (dictionaries)
+    """
+    # Get all unique features from both vectors
+    all_features = set(vec1.keys()) | set(vec2.keys())
+    
+    # Create vectors with same dimensions
+    v1 = [vec1.get(feature, 0) for feature in all_features]
+    v2 = [vec2.get(feature, 0) for feature in all_features]
+    
+    # Calculate dot product
+    dot_product = sum(a * b for a, b in zip(v1, v2))
+    
+    # Calculate magnitudes
+    magnitude1 = math.sqrt(sum(a * a for a in v1))
+    magnitude2 = math.sqrt(sum(b * b for b in v2))
+    
+    # Avoid division by zero
+    if magnitude1 == 0 or magnitude2 == 0:
+        return 0
+    
+    return dot_product / (magnitude1 * magnitude2)
+
+def get_top_bigrams_profile():
+    """
+    Get profile of top bigrams from training data (label=0 records)
+    Returns: Dictionary of top bigrams with their frequencies
+    """
+    # Get settings
+    top_features = getattr(settings, 'BIGRAM_TOP_FEATURES', 300)
+    
+    # Get all normal websites (label=0) from training data
+    normal_records = BigramData.objects.filter(label='0')
+    
+    if not normal_records.exists():
+        print("No training data found (label=0)")
+        return {}
+    
+    # Combine all bigrams from normal websites
+    combined_bigrams = Counter()
+    for record in normal_records:
+        bigram_data = record.bigram_json
+        if isinstance(bigram_data, dict):
+            for bigram, count in bigram_data.items():
+                combined_bigrams[bigram] += count
+    
+    # Get top N most frequent bigrams
+    top_bigrams = dict(combined_bigrams.most_common(top_features))
+    
+    print(f"Profile created with {len(top_bigrams)} top bigrams")
+    return top_bigrams
+
+def compare_bigrams(websites):
+    """
+    Kim et al. approach: Bigram-based defacement detection using cosine similarity
+    """
+    # Get threshold from settings
+    threshold = getattr(settings, 'BIGRAM_SIMILARITY_THRESHOLD', 0.7)
+    
+    # Get profile of top bigrams from training data
+    profile_bigrams = get_top_bigrams_profile()
+    
+    if not profile_bigrams:
+        print("No bigram profile available. Please upload training dataset first.")
+        return
+    
+    for site in websites:
+        url = site.app_url
+        print(f"== compare_bigrams Scanning {url}")
+        
+        try:
+            # Get current website HTML
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            current_html = response.text
+            
+            # Create bigrams from current HTML
+            current_bigrams = create_bigrams(current_html)
+            
+            # Filter current bigrams to only include features from profile
+            filtered_current = {bigram: count for bigram, count in current_bigrams.items() 
+                              if bigram in profile_bigrams}
+            
+            # Calculate cosine similarity with profile
+            similarity = cosine_similarity(filtered_current, profile_bigrams)
+            
+            # Determine status based on similarity threshold
+            if similarity >= threshold:
+                status = 'normal'
+            else:
+                status = 'attacked'
+            
+            # Save result to HistoryScan
+            HistoryScan.objects.create(
+                app_id=site.id,
+                app_name=site.app_name,
+                app_url=site.app_url,
+                method='COMPARE-BIGRAMS',
+                status=status,
+                scan_time=timezone.now()
+            )
+            
+            print(f"Bigram similarity for {url}: {similarity:.4f} (threshold: {threshold}) - {status}")
+            
+        except Exception as e:
+            print(f"Error in bigram similarity check for {url}: {e}")
+            logger.exception(f"Bigram similarity error for {url}: {e}")
 
 def start_scheduler():
     def job():
