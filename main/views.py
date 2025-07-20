@@ -68,13 +68,13 @@ def index(request):
 def setting(request):
     return render(request, 'setting.html')
 
-def upload_dataset(request):
+def upload_bigram_dataset(request):
     if request.method == 'POST':
         try:
             dataset_file = request.FILES.get('dataset_file')
             
             if dataset_file:
-                print(f"== Upload Dataset: {dataset_file.name}")
+                print(f"== Upload BiGram Dataset: {dataset_file.name}")
                 print(f"== File size: {dataset_file.size} bytes")
                 
                 # DELETE ALL OLD DATA IN BigramData BEFORE IMPORT
