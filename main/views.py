@@ -3,6 +3,8 @@ import requests
 from django.http import JsonResponse
 from .models import HistoryScan, WebsiteHTML
 import logging
+import csv
+import io
 
 logger = logging.getLogger(__name__)
 
@@ -25,21 +27,36 @@ def upload_dataset(request):
                 print(f"== Upload Dataset: {dataset_file.name}")
                 print(f"== File size: {dataset_file.size} bytes")
                 
-                # Lưu file vào thư mục (có thể cần tạo thư mục trước)
-                import os
-                upload_dir = 'uploads/datasets'
-                os.makedirs(upload_dir, exist_ok=True)
-                
-                file_path = os.path.join(upload_dir, dataset_file.name)
-                with open(file_path, 'wb+') as destination:
-                    for chunk in dataset_file.chunks():
-                        destination.write(chunk)
-                
-                logger.info(f"Dataset uploaded successfully: {file_path}")
-                # Có thể lưu thông tin vào database nếu cần
+                # Đọc nội dung file trực tiếp từ memory (không lưu file)
+                try:
+                    if dataset_file.name.endswith('.csv'):
+                        # Đọc CSV từ memory
+                        file_content = dataset_file.read().decode('utf-8')
+                        csv_reader = csv.DictReader(io.StringIO(file_content))
+                        
+                        print(f"== Column names: {csv_reader.fieldnames}")
+                        
+                        print("== First 5 rows:")
+                        for i, row in enumerate(csv_reader):
+                            if i >= 5:  # Chỉ in 5 dòng đầu
+                                break
+                            print(f"Row {i + 1}:")
+                            html_content = row.get('HTML', row.get('html', ''))
+                            label_content = row.get('label', row.get('Label', ''))
+                            print(f"  HTML: {html_content[:100]}...")  # In 100 ký tự đầu
+                            print(f"  Label: {label_content}")
+                            print("---")
+                    
+                    # Đọc file text/json từ memory
+                    elif dataset_file.name.endswith(('.txt', '.json')):
+                        content = dataset_file.read().decode('utf-8')
+                        print(f"== File content (first 500 chars): {content[:500]}...")
+                        
+                except Exception as read_error:
+                    print(f"== Error reading file content: {read_error}")
                 
         except Exception as e:
-            logger.exception(f"Error uploading dataset: {e}")
+            logger.exception(f"Error processing dataset: {e}")
     
     return redirect('setting')
     
