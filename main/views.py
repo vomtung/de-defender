@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import requests
 from django.http import JsonResponse
 from .models import HistoryScan, WebsiteHTML, BigramData
+from django.conf import settings
 import logging
 import csv
 import io
