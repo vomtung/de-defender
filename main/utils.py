@@ -282,7 +282,18 @@ def compare_bigrams(websites):
 
 def start_scheduler():
     def job():
-        scanWebsite()
+        try:
+            # Check if database tables exist before scanning
+            from django.db import connection
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='main_websitehtml';")
+                if cursor.fetchone():
+                    scanWebsite()
+                else:
+                    print("== Database tables not ready, skipping scan ==")
+        except Exception as e:
+            print(f"== Scheduler error: {e} ==")
+        
         interval = settings.SCAN_INTERVAL_SECONDS
         t = threading.Timer(interval, job)
         t.daemon = True
