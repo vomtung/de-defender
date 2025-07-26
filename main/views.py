@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import requests
 from django.http import JsonResponse
-from .models import HistoryScan, WebsiteHTML, BigramData
+from .models import HistoryScan, WebsiteHTML, BigramData, ApplicationSetting
 from django.conf import settings
 import logging
 import csv
@@ -66,7 +66,21 @@ def index(request):
     return render(request, 'index.html', {'history_list': history_list})
 
 def setting(request):
-    return render(request, 'setting.html')
+    """
+    Display settings page with current values from database
+    """
+    try:
+        # Get current similarity threshold from database
+        threshold_setting = ApplicationSetting.objects.get(parameter_key='BIGRAM_COSIN_SIMILARITY_THRESHOLD')
+        current_threshold = threshold_setting.parameter_value
+    except ApplicationSetting.DoesNotExist:
+        # Default value if not found in database
+        current_threshold = '0.7'
+    
+    context = {
+        'current_threshold': current_threshold
+    }
+    return render(request, 'setting.html', context)
 
 def upload_bigram_dataset(request):
     if request.method == 'POST':
@@ -160,3 +174,30 @@ def chart_data(request):
         'labels': labels,
         'data': data
     })
+
+def update_settings(request):
+    """
+    Update application settings - save BiGram similarity threshold
+    """
+    if request.method == 'POST':
+        try:
+            # Get similarity threshold from form
+            similarity_threshold = request.POST.get('similarity_threshold')
+            
+            if similarity_threshold:
+                # Update or create setting
+                ApplicationSetting.objects.update_or_create(
+                    parameter_key='BIGRAM_COSIN_SIMILARITY_THRESHOLD',
+                    defaults={'parameter_value': similarity_threshold}
+                )
+                
+                logger.info(f"Updated BIGRAM_COSIN_SIMILARITY_THRESHOLD to {similarity_threshold}")
+                
+                # Redirect back to settings page with success
+                return redirect('setting')
+            
+        except Exception as e:
+            logger.exception(f"Error updating settings: {e}")
+    
+    # If GET request or error, redirect to settings
+    return redirect('setting')

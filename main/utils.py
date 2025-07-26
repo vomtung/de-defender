@@ -13,6 +13,7 @@ from collections import Counter
 from django.conf import settings
 
 from main.models import HistoryScan, WebsiteHTML, BigramData
+from main.models import ApplicationSetting
 
 logger = logging.getLogger(__name__)
 
@@ -223,7 +224,11 @@ def compare_bigrams(websites):
     Kim et al. approach: Bigram-based defacement detection using cosine similarity
     """
     # Get threshold from settings
-    threshold = getattr(settings, 'BIGRAM_SIMILARITY_THRESHOLD', 0.7)
+    try:
+        param = ApplicationSetting.objects.get(parameter_key='BIGRAM_COSIN_SIMILARITY_THRESHOLD')
+        threshold = float(param.parameter_value)
+    except (ApplicationSetting.DoesNotExist, ValueError):
+        threshold = 0.7
     
     # Get profile of top bigrams from training data
     profile_bigrams = get_top_bigrams_profile()
@@ -265,6 +270,7 @@ def compare_bigrams(websites):
                 app_url=site.app_url,
                 method='COMPARE-BIGRAMS',
                 status=status,
+                meta="(similarity=" + str(similarity) + "),(threshold=" + str(threshold) + ")",
                 scan_time=timezone.now()
             )
             

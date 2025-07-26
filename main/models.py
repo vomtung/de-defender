@@ -18,6 +18,7 @@ class HistoryScan(models.Model):
     app_url = models.URLField(max_length=500)
     status = models.CharField(max_length=50)
     method = models.CharField(max_length=100)
+    meta = models.TextField(blank=True, null=True)  # Thêm column meta
     scan_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -32,3 +33,13 @@ class BigramData(models.Model):
     
     def __str__(self):
         return f"Bigrams ({self.label}): {self.total_bigrams} bigrams"
+
+class ApplicationSetting(models.Model):
+    id = models.AutoField(primary_key=True)
+    parameter_key = models.CharField(max_length=255, unique=True)  # Key duy nhất
+    parameter_value = models.TextField()  # Value có thể dài
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.parameter_key}: {self.parameter_value[:50]}..."
