@@ -418,6 +418,8 @@ form{
     color: #ffffff;
     display: block;
     margin-bottom: 5px;
+    text-align: left;
+
 }
 
 .setting_panel_left input, .setting_panel_right input {
@@ -456,11 +458,6 @@ form{
 
 .setting_panel_left input[type="submit"]:hover, .setting_panel_right input[type="submit"]:hover {
     background-color: #e88a00;
-}
-
-/* Detection Settings Specific Styling */
-#detection_settings {
-    text-align: left;
 }
 
 #detection_settings h2 {
