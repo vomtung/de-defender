@@ -18,6 +18,7 @@ class HistoryScan(models.Model):
     app_url = models.URLField(max_length=500)
     status = models.CharField(max_length=50)
     method = models.CharField(max_length=100)
+    meta = models.TextField(blank=True, null=True)  # Thêm column meta
     scan_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
