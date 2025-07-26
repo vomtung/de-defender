@@ -433,6 +433,9 @@ form{
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    margin-left: auto;
+	margin-right: 0;
+    display: block;
 }
 
 .setting_panel_left button:hover, .setting_panel_right button:hover {
@@ -447,8 +450,42 @@ form{
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
+    margin-left: auto;
+    display: block;
 }
 
 .setting_panel_left input[type="submit"]:hover, .setting_panel_right input[type="submit"]:hover {
     background-color: #e88a00;
 }
+
+/* Detection Settings Specific Styling */
+#detection_settings {
+    text-align: left;
+}
+
+#detection_settings h2 {
+    text-align: left;
+}
+
+#detection_settings > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#detection_settings > div > div {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#detection_settings label {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+#detection_settings input {
+    margin: 0 auto;
+    text-align: center;
+}
+
+
