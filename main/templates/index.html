@@ -76,7 +76,7 @@
                         <li>
                             <a href="{{ item.app_url }}" target="_blank"
                             style="color: {% if item.status == 'normal' %}green{% else %}red{% endif %};">
-                            [{{ item.scan_time|date:"H:i:s d/m/Y" }}] &lt;&lt;{{item.method}}&gt;&gt;- {{ item.app_name }} - status: {{item.status}} 
+                            [{{ item.scan_time|date:"H:i:s d/m/Y" }}] &lt;&lt;{{item.method}}&gt;&gt;- {{ item.app_name }} - status: {{item.status}}  - meta: {{item.meta}}
                             </a>
                         </li>
                         {% empty %}

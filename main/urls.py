@@ -9,6 +9,7 @@ urlpatterns = [
     path('de-defender/', views.index, name='de-defender'),
     path('setting/', views.setting, name='setting'),
     path('upload_bigram_dataset/', views.upload_bigram_dataset, name='upload_bigram_dataset'),
+    path('update_settings/', views.update_settings, name='update_settings'),
     path('search/', views.search, name='search'),
     path('save_website_html/', views.save_website_html, name='save_website_html'),
     path('api/chart-data/', chart_data, name='chart-data'),
