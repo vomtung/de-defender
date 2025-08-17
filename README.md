@@ -7,8 +7,6 @@ py -m pip install --upgrade pip
 
 
 python -m django --version
-python -m django --version                               
-
 django-admin --version
 
 
@@ -16,9 +14,7 @@ django-admin startproject main .
 
 
 pip install beautifulsoup4
-pip install beautifulsoup4
-pip install beautifulsoup4
-pip install beautifulsoup4
+pip install bs4
 
 ```
 
