@@ -22,10 +22,12 @@ import os
 import pickle
 
 MODELS_PATH = os.path.join(os.path.dirname(__file__), 'models_ai')
-MODEL_FILE = os.path.join(MODELS_PATH, 'logistic_regression.pkl')  # Đổi tên file model tại đây
-VECTORIZER_FILE = os.path.join(MODELS_PATH, 'vectorizer.pkl')
+MODEL_FILE = os.path.join(MODELS_PATH, 'logistic_model.pkl')  # Đổi tên file model tại đây
+VECTORIZER_FILE = os.path.join(MODELS_PATH, 'tfidf_vectorizer.pkl')
 
 try:
+    print(f"Loading model from: {MODEL_FILE}")
+    print(f"Loading vectorizer from: {VECTORIZER_FILE}")
     with open(MODEL_FILE, 'rb') as f:
         logistic_regression_model = pickle.load(f)
     with open(VECTORIZER_FILE, 'rb') as f:
@@ -33,7 +35,7 @@ try:
 except Exception as e:
     logistic_regression_model = None
     vectorizer = None
-    print(f"Không thể load model hoặc vectorizer từ models_ai: {e}")
+    print(f"Cannot load model or vectorizer from models_ai: {e}")
 
 def scanWebsite():
     websites = WebsiteHTML.objects.all()
@@ -46,7 +48,7 @@ def scanWebsite():
 
     compare_bigrams(websites)
 
-    #compare_logistic_regression(websites)
+    compare_logistic_regression(websites)
 
             
 
@@ -312,17 +314,17 @@ def compare_bigrams(websites):
 def compare_logistic_regression(websites):
     """
     Logistic Regression-based defacement detection
-    Sử dụng model.pkl và vectorizer.pkl trong thư mục models_ai.
+    Uses logistic_regression.pkl and vectorizer.pkl in models_ai folder.
     """
-    # Load threshold từ ApplicationSetting
+    # Load threshold from ApplicationSetting
     try:
         param = ApplicationSetting.objects.get(parameter_key='LOGISTIC_REGRESSION_THRESHOLD')
         threshold = float(param.parameter_value)
     except (ApplicationSetting.DoesNotExist, ValueError):
-        threshold = 0.7
+        threshold = 0.5
 
     if logistic_regression_model is None or vectorizer is None:
-        print("Model hoặc vectorizer chưa được load. Vui lòng kiểm tra các file .pkl trong models_ai.")
+        print("Model or vectorizer not loaded. Please check .pkl files in models_ai.")
         return
 
     for site in websites:
@@ -330,27 +332,27 @@ def compare_logistic_regression(websites):
         print(f"== compare_logistic_regression Scanning {url}")
 
         try:
-            # Lấy HTML hiện tại của website
+            # Get current website HTML
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             current_html = response.text
 
-            # Biến đổi HTML thành feature vector bằng vectorizer
+            # Transform HTML to feature vector using vectorizer
             features = vectorizer.transform([current_html])
 
-            # Dự đoán xác suất bị deface (class 1)
+            # Predict defacement probability (class 1)
             if hasattr(logistic_regression_model, "predict_proba"):
                 predictions = logistic_regression_model.predict_proba(features)[:, 1]
             else:
                 predictions = logistic_regression_model.predict(features)
 
-            # Xác định trạng thái dựa trên ngưỡng
+            # Determine status based on threshold
             if predictions[0] >= threshold:
-                status = 'normal'
-            else:
                 status = 'attacked'
+            else:
+                status = 'normal'
 
-            # Lưu kết quả vào HistoryScan
+            # Save result to HistoryScan
             HistoryScan.objects.create(
                 app_id=site.id,
                 app_name=site.app_name,
