@@ -17,6 +17,26 @@ from main.models import ApplicationSetting
 
 logger = logging.getLogger(__name__)
 
+# Load AI/ML models từ models_ai folder
+import os
+import pickle
+
+MODELS_PATH = os.path.join(os.path.dirname(__file__), 'models_ai')
+MODEL_FILE = os.path.join(MODELS_PATH, 'logistic_model.pkl')  # Đổi tên file model tại đây
+VECTORIZER_FILE = os.path.join(MODELS_PATH, 'tfidf_vectorizer.pkl')
+
+try:
+    print(f"Loading model from: {MODEL_FILE}")
+    print(f"Loading vectorizer from: {VECTORIZER_FILE}")
+    with open(MODEL_FILE, 'rb') as f:
+        logistic_regression_model = pickle.load(f)
+    with open(VECTORIZER_FILE, 'rb') as f:
+        vectorizer = pickle.load(f)
+except Exception as e:
+    logistic_regression_model = None
+    vectorizer = None
+    print(f"Cannot load model or vectorizer from models_ai: {e}")
+
 def scanWebsite():
     websites = WebsiteHTML.objects.all()
 
@@ -28,13 +48,13 @@ def scanWebsite():
 
     compare_bigrams(websites)
 
+    compare_logistic_regression(websites)
 
             
 
             
 def compare_html(websites):
     for site in websites:
-
         url = site.app_url
         old_html = site.html_content
         print(f"== scanWebsite Scanning HTML{url}")
@@ -43,25 +63,36 @@ def compare_html(websites):
             response.raise_for_status()
             new_html = response.text
 
-            if new_html.strip() == old_html.strip():
+            # Loại bỏ toàn bộ khoảng trắng (space, tab, xuống dòng)
+            def normalize_html(html):
+                return re.sub(r'\s+', '', html)
+
+            norm_old_html = normalize_html(old_html)
+            norm_new_html = normalize_html(new_html)
+
+            # In ra nội dung để debug
+            #print(f"[DEBUG] norm_old_html for {url}:\n{norm_old_html}\n")
+            #print(f"[DEBUG] norm_new_html for {url}:\n{norm_new_html}\n")
+
+            if norm_new_html == norm_old_html:
                 status = 'normal'
                 HistoryScan.objects.create(
-                app_id=site.id,
-                app_name=site.app_name,
-                app_url=site.app_url,
-                method='COMPATRE-HTML',
-                status='normal',
-                scan_time=timezone.now()
-            )
+                    app_id=site.id,
+                    app_name=site.app_name,
+                    app_url=site.app_url,
+                    method='COMPATRE-HTML',
+                    status='normal',
+                    scan_time=timezone.now()
+                )
             else:
                 status = 'attacked'
                 HistoryScan.objects.create(
-                app_id=site.id,
-                app_name=site.app_name,
-                app_url=site.app_url,
-                method='COMPARE-HTML',
-                status='attacked',
-                scan_time=timezone.now()
+                    app_id=site.id,
+                    app_name=site.app_name,
+                    app_url=site.app_url,
+                    method='COMPARE-HTML',
+                    status='attacked',
+                    scan_time=timezone.now()
                 )
             logger.info(f"Scanned {url} - {status}")
         except Exception as e:
@@ -279,6 +310,63 @@ def compare_bigrams(websites):
         except Exception as e:
             print(f"Error in bigram similarity check for {url}: {e}")
             logger.exception(f"Bigram similarity error for {url}: {e}")
+
+def compare_logistic_regression(websites):
+    """
+    Logistic Regression-based defacement detection
+    Uses logistic_regression.pkl and vectorizer.pkl in models_ai folder.
+    """
+    # Load threshold from ApplicationSetting
+    try:
+        param = ApplicationSetting.objects.get(parameter_key='LOGISTIC_REGRESSION_THRESHOLD')
+        threshold = float(param.parameter_value)
+    except (ApplicationSetting.DoesNotExist, ValueError):
+        threshold = 0.5
+
+    if logistic_regression_model is None or vectorizer is None:
+        print("Model or vectorizer not loaded. Please check .pkl files in models_ai.")
+        return
+
+    for site in websites:
+        url = site.app_url
+        print(f"== compare_logistic_regression Scanning {url}")
+
+        try:
+            # Get current website HTML
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            current_html = response.text
+
+            # Transform HTML to feature vector using vectorizer
+            features = vectorizer.transform([current_html])
+
+            # Predict defacement probability (class 1)
+            if hasattr(logistic_regression_model, "predict_proba"):
+                predictions = logistic_regression_model.predict_proba(features)[:, 1]
+            else:
+                predictions = logistic_regression_model.predict(features)
+
+            # Determine status based on threshold
+            if predictions[0] >= threshold:
+                status = 'attacked'
+            else:
+                status = 'normal'
+
+            # Save result to HistoryScan
+            HistoryScan.objects.create(
+                app_id=site.id,
+                app_name=site.app_name,
+                app_url=site.app_url,
+                method='COMPARE-LOGISTIC-REGRESSION',
+                status=status,
+                meta="(prediction=" + str(predictions[0]) + "),(threshold=" + str(threshold) + ")",
+                scan_time=timezone.now()
+            )
+
+            print(f"Logistic Regression prediction for {url}: {predictions[0]:.4f} (threshold: {threshold}) - {status}")
+
+        except Exception as e:
+            print(f"Error in logistic regression check for {url}: {e}")
 
 def start_scheduler():
     def job():

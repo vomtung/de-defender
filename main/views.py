@@ -59,7 +59,7 @@ def save_bigrams_to_db(bigram_counts, label):
         return 0
 
 def index(request):
-    history_list = HistoryScan.objects.order_by('-scan_time')[:10]  # Get 10 latest records
+    history_list = HistoryScan.objects.order_by('-id')[:10]  # Get 10 latest records
     latest_ids = HistoryScan.objects.order_by('-scan_time').values_list('id', flat=True)[:10]
     HistoryScan.objects.exclude(id__in=latest_ids).delete()
 
