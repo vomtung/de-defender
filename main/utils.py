@@ -46,14 +46,13 @@ def scanWebsite():
 
     compare_bigrams(websites)
 
-    #  compare_logistic_regression(websites)
+    #compare_logistic_regression(websites)
 
             
 
             
 def compare_html(websites):
     for site in websites:
-
         url = site.app_url
         old_html = site.html_content
         print(f"== scanWebsite Scanning HTML{url}")
@@ -62,25 +61,36 @@ def compare_html(websites):
             response.raise_for_status()
             new_html = response.text
 
-            if new_html.strip() == old_html.strip():
+            # Loại bỏ toàn bộ khoảng trắng (space, tab, xuống dòng)
+            def normalize_html(html):
+                return re.sub(r'\s+', '', html)
+
+            norm_old_html = normalize_html(old_html)
+            norm_new_html = normalize_html(new_html)
+
+            # In ra nội dung để debug
+            #print(f"[DEBUG] norm_old_html for {url}:\n{norm_old_html}\n")
+            #print(f"[DEBUG] norm_new_html for {url}:\n{norm_new_html}\n")
+
+            if norm_new_html == norm_old_html:
                 status = 'normal'
                 HistoryScan.objects.create(
-                app_id=site.id,
-                app_name=site.app_name,
-                app_url=site.app_url,
-                method='COMPATRE-HTML',
-                status='normal',
-                scan_time=timezone.now()
-            )
+                    app_id=site.id,
+                    app_name=site.app_name,
+                    app_url=site.app_url,
+                    method='COMPATRE-HTML',
+                    status='normal',
+                    scan_time=timezone.now()
+                )
             else:
                 status = 'attacked'
                 HistoryScan.objects.create(
-                app_id=site.id,
-                app_name=site.app_name,
-                app_url=site.app_url,
-                method='COMPARE-HTML',
-                status='attacked',
-                scan_time=timezone.now()
+                    app_id=site.id,
+                    app_name=site.app_name,
+                    app_url=site.app_url,
+                    method='COMPARE-HTML',
+                    status='attacked',
+                    scan_time=timezone.now()
                 )
             logger.info(f"Scanned {url} - {status}")
         except Exception as e:
